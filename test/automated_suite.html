@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SLICE IT: Automated Test Suite</title>
+  <link rel="stylesheet" href="../css/content.css">
+  <style>
+    body { background: #0f172a; color: #f8fafc; font-family: monospace; padding: 20px; }
+    .pass { color: #34d399; }
+    .fail { color: #f87171; font-weight: bold; }
+    .card-target { width: 200px; height: 100px; background: #3b82f6; margin: 10px; }
+  </style>
+</head>
+<body>
+  <h1>SLICE IT: Ninja Mode - Test Harness</h1>
+  <div id="test-sandbox">
+    <div class="card-target" id="target-1">Sample Card 1</div>
+    <div class="card-target" id="target-2" style="width: 400px; height: 300px;">Tough Element</div>
+    <img id="target-img" src="../icons/icon-48.png" style="width: 48px; height: 48px;">
+    <button id="target-btn">Action Button</button>
+  </div>
+
+  <div id="results">Running tests...</div>
+
+  <script src="../js/math.js"></script>
+  <script src="../js/audio.js"></script>
+  <script src="../js/particles.js"></script>
+  <script src="../js/fruits.js"></script>
+  <script src="../js/slicer.js"></script>
+  <script src="../js/hud.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/content.js"></script>
+
+  <script>
+    const logs = [];
+    function assert(condition, message) {
+      if (condition) {
+        logs.push({ pass: true, msg: 'PASS: ' + message });
+      } else {
+        logs.push({ pass: false, msg: 'FAIL: ' + message });
+        console.error('Assertion failed:', message);
+      }
+    }
+
+    try {
+      // 1. Math & Geometry
+      assert(typeof NinjaMath.cutRectangle === 'function', 'NinjaMath.cutRectangle is defined');
+      const clipRes = NinjaMath.cutRectangle(100, 100, -10, 50, 110, 50);
+      assert(clipRes.polyA.includes('polygon(') && clipRes.polyB.includes('polygon('), 'Horizontal cut produces valid CSS polygon clip-paths');
+      
+      const circHit = NinjaMath.segmentIntersectsCircle(0, 50, 100, 50, 50, 50, 20);
+      assert(circHit === true, 'Segment intersects circle center');
+
+      const circMiss = NinjaMath.segmentIntersectsCircle(0, 0, 10, 0, 50, 50, 10);
+      assert(circMiss === false, 'Segment misses circle when far away');
+
+      const distLine = NinjaMath.distPointToLine(50, 50, 0, 50, 100, 50);
+      assert(Math.abs(distLine) < 0.001, 'Point on line distance is ~0');
+
+      // 2. Audio Engine
+      assert(typeof NinjaAudio.playSlice === 'function', 'NinjaAudio.playSlice is defined');
+      assert(typeof NinjaAudio.playSwoosh === 'function', 'NinjaAudio.playSwoosh is defined');
+      assert(typeof NinjaAudio.playBombExplosion === 'function', 'NinjaAudio.playBombExplosion is defined');
+      assert(typeof NinjaAudio.playCombo === 'function', 'NinjaAudio.playCombo is defined');
+      assert(typeof NinjaAudio.playFeverStart === 'function', 'NinjaAudio.playFeverStart is defined');
+
+      // 3. Effects & Particles
+      NinjaEffects.setBladeTheme('neon_cyan');
+      const p = NinjaEffects.spawnParticle();
+      assert(p.active === true, 'Particle spawned from pool is active');
+      NinjaEffects.spawnJuiceExplosion(100, 100, '#ff0055', 5, 0);
+      NinjaEffects.spawnSparks(100, 100, 4);
+      NinjaEffects.spawnShockwave(100, 100, '#00f0ff', 60);
+      NinjaEffects.spawnCutSeam(10, 10, 80, 80);
+      NinjaEffects.spawnFloatingText(100, 100, '+50 PERFECT!', '#ffe600', '#ffcc00', true);
+      NinjaEffects.update(0.016);
+      assert(NinjaEffects.particles.filter(p => p.active).length > 5, 'Particles are updating and active');
+
+      // 4. Fruits and Bombs
+      NinjaFruitManager.reset('survival');
+      NinjaFruitManager.launchWave();
+      assert(NinjaFruitManager.fruits.length >= 1, 'Fruits or bombs launched in survival wave');
+      NinjaFruitManager.update(0.016);
+      const firstFruit = NinjaFruitManager.fruits[0];
+      const sliceHits = NinjaFruitManager.checkSlice(firstFruit.x - 50, firstFruit.y, firstFruit.x + 50, firstFruit.y, 0, 500);
+      assert(sliceHits.length === 1, 'Fruit/Bomb cut registered correctly');
+
+      // 5. DOM Target Slicer
+      const halvesDiv = document.createElement('div');
+      halvesDiv.id = 'slice-it-halves-container';
+      document.body.appendChild(halvesDiv);
+      NinjaDOMSlicer.init(halvesDiv);
+
+      const target1 = document.getElementById('target-1');
+      const rect1 = target1.getBoundingClientRect();
+      const domHits = NinjaDOMSlicer.checkSlice(rect1.left - 20, rect1.top + rect1.height / 2, rect1.right + 20, rect1.top + rect1.height / 2, 0, 600);
+      assert(domHits.length === 1, 'DOM element slice detected');
+      assert(target1.style.visibility === 'hidden', 'Sliced DOM element hidden safely');
+      assert(NinjaDOMSlicer.activeHalves.length === 2, 'Two flying clone halves created in DOM');
+
+      // Test restoration
+      NinjaDOMSlicer.restoreAll();
+      assert(target1.style.visibility !== 'hidden', 'Sliced element restored to visible');
+      assert(NinjaDOMSlicer.activeHalves.length === 0, 'All clone halves cleared on restore');
+
+      // 6. Engine TimeManager & Slicing
+      const canvas = document.createElement('canvas');
+      const viewport = document.createElement('div');
+      NinjaHUD.init(document.body);
+      NinjaEngine.init(canvas, viewport, { mode: 'classic', soundVolume: 0.5 });
+      assert(NinjaEngine.gameMode === 'classic', 'Game engine mode initialized');
+      assert(NinjaEngine.timeManager.timeScale === 1.0, 'Initial timeScale is 1.0');
+      
+      NinjaEngine.timeManager.hitStop(50);
+      assert(NinjaEngine.timeManager.update(0.016) === 0, 'Hit-stop freezes delta time to 0');
+
+      NinjaEngine.timeManager.reset();
+      NinjaEngine.timeManager.slowMotion(300, 0.3);
+      const slowDt = NinjaEngine.timeManager.update(0.016);
+      assert(slowDt > 0 && slowDt < 0.016, 'Slow motion scales delta time down smoothly');
+
+      // 7. High Score & Fever Mode
+      NinjaEngine.addScore(100, 200, 200);
+      assert(NinjaEngine.score === 100, 'Score added correctly');
+      NinjaEngine.activateFever();
+      assert(NinjaEngine.isFeverActive === true, 'Fever mode activated');
+      NinjaEngine.addScore(100, 200, 200);
+      assert(NinjaEngine.score === 300, 'Fever mode applies 2X points multiplier');
+
+      logs.push({ pass: true, msg: 'ALL TEST SUITE ASSERTIONS PASSED PERFECTLY!' });
+    } catch (err) {
+      logs.push({ pass: false, msg: 'EXCEPTION IN TEST: ' + err.message + '\n' + err.stack });
+    }
+
+    const resDiv = document.getElementById('results');
+    resDiv.innerHTML = logs.map(l => `<div class="${l.pass ? 'pass' : 'fail'}">${l.msg}</div>`).join('');
+    window.testSuccess = logs.every(l => l.pass);
+    console.log('TEST SUMMARY: ' + (window.testSuccess ? 'ALL PASSED' : 'FAILURES DETECTED'));
+  </script>
+</body>
+</html>

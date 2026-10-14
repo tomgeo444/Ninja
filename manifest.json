@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "SLICE IT: Ninja Mode",
+  "version": "1.0.0",
+  "description": "Turn any website into an exhilarating Fruit Ninja-style arcade game with cinematic juice and synthesized audio!",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "commands": {
+    "toggle-ninja-mode": {
+      "suggested_key": {
+        "default": "Alt+S",
+        "mac": "Alt+S"
+      },
+      "description": "Toggle Slice It: Ninja Mode"
+    }
+  }
+}

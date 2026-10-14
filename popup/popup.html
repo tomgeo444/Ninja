@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLICE IT: Ninja Mode - Arcade Edition</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- CRT Screen Overlay with Scanlines & Bezel -->
+  <div class="crt-screen">
+    <div class="scanlines"></div>
+    <div class="screen-vignette"></div>
+
+    <!-- Cabinet Screws -->
+    <div class="screw screw-tl">+</div>
+    <div class="screw screw-tr">+</div>
+    <div class="screw screw-bl">+</div>
+    <div class="screw screw-br">+</div>
+
+    <div class="popup-container">
+      <!-- Retro Marquee Header -->
+      <header class="arcade-header">
+        <div class="header-topline">
+          <span class="blink-fast red-text">★ 1UP ★</span>
+          <span class="yellow-text">HI-SCORE: <span id="marquee-top-score">000000</span></span>
+          <span class="green-text">CREDIT 01</span>
+        </div>
+        <div class="marquee-title-box">
+          <div class="marquee-title">
+            <span class="char-c">S</span><span class="char-l">L</span><span class="char-i">I</span><span class="char-c">C</span><span class="char-e">E</span>
+            <span class="space">&nbsp;</span>
+            <span class="char-i">I</span><span class="char-t">T</span>
+          </div>
+          <div class="marquee-badge">NINJA WARRIOR // 1989</div>
+        </div>
+        <div class="cabinet-sub">ARCADE SYSTEM BOARD V3.0 // INSERT TAB TO PLAY</div>
+      </header>
+
+      <!-- Photosensitivity Notice -->
+      <div class="alert-box" id="photosensitivity-alert">
+        <div class="alert-tag">[WARN]</div>
+        <div class="alert-content">
+          RAPID FLASH & CAMERA SHAKE HAZARD. TOGGLE LOW JUICE IF SENSITIVE.
+        </div>
+        <button class="alert-close" id="close-alert-btn" title="Acknowledge">✕</button>
+      </div>
+
+      <!-- Mode Selection (Stage Select) -->
+      <section class="retro-section">
+        <div class="section-banner">
+          <span class="banner-arrow">►</span>
+          <span class="banner-title">STAGE SELECT</span>
+          <span class="banner-deco">◄</span>
+        </div>
+        <div class="mode-grid">
+          <label class="mode-card active" data-mode="classic">
+            <input type="radio" name="game-mode" value="classic" checked>
+            <div class="mode-marker">01</div>
+            <div class="mode-icon">⏱️</div>
+            <div class="mode-name">CLASSIC</div>
+            <div class="mode-desc">60s BLITZ</div>
+          </label>
+          <label class="mode-card" data-mode="survival">
+            <input type="radio" name="game-mode" value="survival">
+            <div class="mode-marker">02</div>
+            <div class="mode-icon">💣</div>
+            <div class="mode-name">SURVIVAL</div>
+            <div class="mode-desc">3 LIVES</div>
+          </label>
+          <label class="mode-card" data-mode="zen">
+            <input type="radio" name="game-mode" value="zen">
+            <div class="mode-marker">03</div>
+            <div class="mode-icon">☯️</div>
+            <div class="mode-name">ZEN DOJO</div>
+            <div class="mode-desc">FREE PLAY</div>
+          </label>
+        </div>
+      </section>
+
+      <!-- Blade Theme Selection (Weapon Equip) -->
+      <section class="retro-section">
+        <div class="section-banner">
+          <span class="banner-arrow">►</span>
+          <span class="banner-title">WEAPON ARSENAL</span>
+          <span class="banner-deco">◄</span>
+        </div>
+        <div class="theme-row">
+          <button class="theme-pill active" data-theme="neon_cyan" title="Neon Katana">
+            <span class="swatch swatch-cyan"></span>
+            <span class="weapon-name">CYAN</span>
+          </button>
+          <button class="theme-pill" data-theme="dragon_fire" title="Flame Blade">
+            <span class="swatch swatch-fire"></span>
+            <span class="weapon-name">FIRE</span>
+          </button>
+          <button class="theme-pill" data-theme="toxic_green" title="Toxic Saber">
+            <span class="swatch swatch-toxic"></span>
+            <span class="weapon-name">ACID</span>
+          </button>
+          <button class="theme-pill" data-theme="prismatic_rainbow" title="Prism Rainbow">
+            <span class="swatch swatch-rainbow"></span>
+            <span class="weapon-name">PRISM</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Dip-Switches / FX Juice & Audio Test -->
+      <section class="retro-section settings-grid">
+        <div class="setting-col">
+          <div class="section-mini-title">DIP-SW: JUICE</div>
+          <div class="intensity-group">
+            <button class="btn-pill" data-intensity="low">8-BIT</button>
+            <button class="btn-pill" data-intensity="medium">16-BIT</button>
+            <button class="btn-pill active" data-intensity="high">MAX</button>
+          </div>
+        </div>
+        <div class="setting-col">
+          <div class="section-mini-title">
+            <span>SOUND TEST</span>
+            <span id="volume-val" class="yellow-text">70%</span>
+          </div>
+          <div class="volume-row">
+            <input type="range" id="volume-slider" min="0" max="100" value="70">
+          </div>
+        </div>
+      </section>
+
+      <!-- Hall of Fame / High Score Table -->
+      <section class="retro-section leaderboard-box">
+        <div class="leaderboard-header">
+          <span>RANK</span>
+          <span>MISSION</span>
+          <span>HI-SCORE</span>
+        </div>
+        <div class="leaderboard-row">
+          <span class="rank-badge rank-1">1ST</span>
+          <span class="mode-lbl">CLASSIC</span>
+          <span class="score-val" id="score-classic">000000</span>
+        </div>
+        <div class="leaderboard-row">
+          <span class="rank-badge rank-2">2ND</span>
+          <span class="mode-lbl">SURVIVAL</span>
+          <span class="score-val" id="score-survival">000000</span>
+        </div>
+        <div class="leaderboard-row">
+          <span class="rank-badge rank-3">3RD</span>
+          <span class="mode-lbl">ZEN DOJO</span>
+          <span class="score-val" id="score-zen">000000</span>
+        </div>
+      </section>
+
+      <!-- Giant Arcade Start Button -->
+      <div class="arcade-action-area">
+        <button class="arcade-push-btn" id="btn-launch">
+          <span class="btn-flare"></span>
+          <span class="btn-icon">🕹️</span>
+          <span class="btn-label">► PUSH 1P START ◄</span>
+        </button>
+        <div class="arcade-footer-hint">
+          <span>COIN = <kbd>Alt + S</kbd></span>
+          <span class="hint-sep">|</span>
+          <span>ABORT = <kbd>Esc</kbd></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

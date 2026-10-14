@@ -1,0 +1,485 @@
+/* ==========================================================================
+   SLICE IT: Ninja Mode - Injected Stylesheet
+   Full isolation, cyberpunk arcade neon aesthetic, responsive layout.
+   ========================================================================== */
+
+#slice-it-root {
+  all: initial;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2147483640;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: crosshair;
+  font-family: 'Impact', 'Montserrat', 'Arial Black', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+#slice-it-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+#slice-it-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+#slice-it-halves-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.slice-it-clone-half {
+  position: fixed !important;
+  pointer-events: none !important;
+  z-index: 2147483630 !important;
+  overflow: hidden !important;
+  transform-origin: center center !important;
+  will-change: transform, opacity !important;
+}
+
+/* ==========================================================================
+   HUD Layout & Glassmorphism Panels
+   ========================================================================== */
+
+.slice-it-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483642;
+}
+
+.slice-it-hud-box {
+  position: absolute;
+  pointer-events: auto;
+  background: rgba(8, 12, 22, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  border-radius: 12px;
+  padding: 10px 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 240, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.slice-it-hud-top-left {
+  top: 18px;
+  left: 20px;
+  min-width: 140px;
+}
+
+.slice-it-hud-top-center {
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  text-align: center;
+  min-width: 130px;
+}
+
+.slice-it-hud-top-right {
+  top: 18px;
+  right: 20px;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+}
+
+.slice-it-hud-bottom-left {
+  bottom: 20px;
+  left: 20px;
+  width: 260px;
+}
+
+/* Typography & Labels */
+.slice-it-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #00f0ff;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+  font-weight: 700;
+}
+
+.slice-it-score {
+  font-size: 32px;
+  color: #ffffff;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.5), 0 0 24px rgba(0, 240, 255, 0.6);
+}
+
+.slice-it-best-score {
+  font-size: 11px;
+  color: #8899aa;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.slice-it-best-score span {
+  color: #ffe600;
+  font-weight: bold;
+}
+
+.slice-it-mode-badge {
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  color: #ffe600;
+  text-shadow: 0 0 8px rgba(255, 230, 0, 0.6);
+  font-weight: 800;
+}
+
+.slice-it-timer-lives {
+  font-size: 28px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.6);
+}
+
+/* HUD Buttons */
+.slice-it-hud-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.slice-it-hud-btn:hover {
+  background: rgba(0, 240, 255, 0.25);
+  border-color: #00f0ff;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.slice-it-restore-btn {
+  color: #00f0ff;
+  border-color: #00f0ff;
+}
+
+.slice-it-exit-btn {
+  color: #ff3b30;
+  border-color: rgba(255, 59, 48, 0.5);
+  font-size: 15px;
+  padding: 4px 10px;
+}
+
+.slice-it-exit-btn:hover {
+  background: rgba(255, 59, 48, 0.3);
+  border-color: #ff3b30;
+  box-shadow: 0 0 14px rgba(255, 59, 48, 0.6);
+}
+
+/* Fever Meter */
+.slice-it-fever-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #ff00ff;
+  text-shadow: 0 0 8px rgba(255, 0, 255, 0.8);
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.slice-it-fever-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 0, 255, 0.4);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+.slice-it-fever-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #ff007f, #9b51e0, #00f0ff);
+  box-shadow: 0 0 14px #ff00ff;
+  transition: width 0.15s ease-out;
+}
+
+/* Fever Banner */
+.slice-it-fever-banner {
+  display: none;
+  position: absolute;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, rgba(255, 0, 128, 0.8), rgba(0, 240, 255, 0.8));
+  border: 2px solid #ffffff;
+  border-radius: 30px;
+  padding: 8px 24px;
+  font-size: 16px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px #ffffff;
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+  animation: feverPulse 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes feverPulse {
+  0% { transform: translateX(-50%) scale(0.98); box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+  100% { transform: translateX(-50%) scale(1.04); box-shadow: 0 0 40px rgba(0, 240, 255, 0.9); }
+}
+
+/* Combo Callout */
+.slice-it-combo-callout {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.3);
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.slice-it-combo-callout.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+  animation: comboPop 0.8s forwards;
+}
+
+.combo-title {
+  font-size: 56px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  line-height: 1.1;
+  font-style: italic;
+  -webkit-text-stroke: 2px #000000;
+}
+
+.combo-sub {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-shadow: 0 0 14px rgba(0, 0, 0, 0.9);
+}
+
+@keyframes comboPop {
+  0% { transform: translate(-50%, -50%) scale(0.5) rotate(-6deg); opacity: 0; }
+  25% { transform: translate(-50%, -50%) scale(1.15) rotate(2deg); opacity: 1; }
+  75% { transform: translate(-50%, -50%) scale(1.05) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0.95) translateY(-25px); opacity: 0; }
+}
+
+/* ==========================================================================
+   Countdown Overlay
+   ========================================================================== */
+
+.slice-it-countdown-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 8, 16, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483645;
+}
+
+.slice-it-countdown-text {
+  font-size: 110px;
+  font-weight: 900;
+  font-style: italic;
+  color: #00f0ff;
+  text-shadow: 0 0 35px #00f0ff, 0 0 70px #00f0ff;
+  -webkit-text-stroke: 3px #ffffff;
+}
+
+.pop-anim {
+  animation: countPop 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes countPop {
+  0% { transform: scale(0.3); opacity: 0; }
+  40% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1.0); opacity: 0.9; }
+}
+
+/* ==========================================================================
+   Game Over Modal
+   ========================================================================== */
+
+.slice-it-gameover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 6, 12, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483646;
+}
+
+.slice-it-modal-card {
+  background: rgba(12, 17, 30, 0.94);
+  border: 2px solid rgba(0, 240, 255, 0.45);
+  border-radius: 20px;
+  padding: 34px 44px;
+  width: 90%;
+  max-width: 440px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 240, 255, 0.3);
+  text-align: center;
+  animation: modalSlideIn 0.35s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(30px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.slice-it-modal-title {
+  font-size: 38px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 3px;
+  text-shadow: 0 0 20px #00f0ff;
+  margin-bottom: 8px;
+}
+
+.slice-it-new-record-badge {
+  color: #ffe600;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-shadow: 0 0 12px #ffe600;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.7; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1.02); }
+}
+
+.slice-it-modal-score-box {
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin: 16px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slice-it-modal-score-label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #8899aa;
+  font-weight: 700;
+}
+
+.slice-it-modal-score {
+  font-size: 46px;
+  font-weight: 900;
+  color: #00f0ff;
+  text-shadow: 0 0 18px rgba(0, 240, 255, 0.8);
+  line-height: 1.1;
+}
+
+.slice-it-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.slice-it-stat-item {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 10px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.slice-it-stat-val {
+  font-size: 20px;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.slice-it-stat-lbl {
+  font-size: 9px;
+  color: #8899aa;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+.slice-it-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.slice-it-modal-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  border: none;
+}
+
+.slice-it-btn-play {
+  background: linear-gradient(135deg, #00f0ff, #0080ff);
+  color: #000000;
+  box-shadow: 0 4px 18px rgba(0, 240, 255, 0.4);
+}
+
+.slice-it-btn-play:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 240, 255, 0.7);
+}
+
+.slice-it-btn-restore {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.slice-it-btn-restore:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: #ffffff;
+}
+
+.slice-it-btn-exit {
+  background: transparent;
+  color: #8899aa;
+}
+
+.slice-it-btn-exit:hover {
+  color: #ff3b30;
+}
