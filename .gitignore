@@ -10,3 +10,4 @@ Thumbs.db
 # Screenshots
 *.png
 !icons/*.png
+!store-screenshot-1280x800.png
